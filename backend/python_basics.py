@@ -18,6 +18,18 @@ jobs = [
 #print a header to make the output easier to read
 print("All jobs:")
 
+# Function to print all jobs
+def print_jobs(jobs):
+    pass
+
+# Function to get all failed jobs
+def get_failed_jobs(jobs):
+    pass
+
+# Funtion to count all failed jobs
+def count_failed_jobs(jobs):
+    pass
+
 # Add a variable to count the number of failed jobs
 failed_count = 0
 # Loop through every job in the jobs list
