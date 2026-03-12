@@ -63,7 +63,7 @@ def print_failed_jobs(jobs):
 
     # Loop through failed jobs and print them
     for job in jobs:
-        print(f"{job['job_id']} - {job['job_name']}")")
+        print(f"{job['job_id']} - {job['job_name']}")
 
 
 #---------------------------------------------
