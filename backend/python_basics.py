@@ -59,7 +59,7 @@ def count_failed_jobs(jobs):
 
 # This funtion prints failed jobs
 def print_failed_jobs(jobs):
-    print("Failed job")
+    print("Failed Jobs:")
 
     # Loop through failed jobs and print them
     for job in jobs:
