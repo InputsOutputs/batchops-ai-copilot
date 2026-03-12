@@ -1,4 +1,4 @@
-Day 3 Notes
+## Day 3 Notes
 
 Today I learned about Python Functions.
 
