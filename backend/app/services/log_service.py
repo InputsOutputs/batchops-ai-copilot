@@ -1,20 +1,19 @@
 #--------------------------------------
 # log_service.py
 #--------------------------------------
-# Improved log parsing service
-#
-# Improvments added in Day 5:
-# 1. Multiple error keyword detection
-# 2. Error handling for missing files
-# 3. Cleaner and scalable detection logic
+# Day 6 improvements:
+# 1. Read log files safely
+# 2. Extract error lines using multiple patterns
+# 3. Convert raw error lines into structured data
 #--------------------------------------
 
-# List of patterns that indicate a failure
+# Keywords that indicate failure-related log lines
 ERROR_PATTERNS = [
     "ERROR",
     "FAILED",
     "EXCEPTION",
-    "TIMEOUT"
+    "TIMEOUT",
+    "PERMISSION_DENIED"
 ]
 # Function to read the contents of a log file
 def read_log_file(file_path):
@@ -61,3 +60,72 @@ def extract_error_lines(log_text):
                 # Once matched, stop checking other patterns
                 break
     return detected_errors
+
+def classify_error_line(error_line):
+    """
+    Converts a raw error line into a structured dictionary.
+
+    Returns:
+        {
+            "error_type": ...,
+            "severity": ...,
+            "message": ...
+        }
+    """
+    
+    # Normalize the text to uppercase for easier matching
+    upper_line = error_line.upper()
+    
+    # Detect missing file errors
+    if "FILE" in upper_line and "NOT FOUND" in upper_line:
+        return {
+            "error_type": "FILE_NOT_FOUND",
+            "serverity": "HIGH",
+            "message": error_line
+        }
+        
+    # Detect database timeout errors
+    elif "DATABASE" in upper_line and "TIMEOUT" in upper_line:
+        return {
+            "error_type": "DATABASE_TIMEOUT",
+            "serverity": "HIGH",
+            "message": error_line
+        }
+
+    # Detect dependency-related failures
+    elif "DEPENDENCY" in upper_line:
+        return {
+            "error_type": "DEPENDENCY_FAILURE",
+            "severity": "MEDIUM",
+            "message": error_line
+        }
+
+    # Detect permission-related issues
+    elif "PERMISSION" in upper_line:
+        return {
+            "error_type": "PERMISSION_DENIED",
+            "severity": "HIGH",
+            "message": error_line
+        }
+
+    # Default fallback when no known rule matches
+    else:
+        return {
+            "error_type": "UNKNOWN_ERROR",
+            "severity": "MEDIUM",
+            "message": error_line
+        }
+
+def structure_detected_errors(error_lines):
+    """
+    Takes a list of raw error lines and returns
+    a list of structured error dictionaries.
+    """
+    structured_errors = []
+
+    # Convert each raw error line into structured data
+    for error_line in error_lines:
+        structured_error = classify_error_line(error_line)
+        structured_errors.append(structured_error)
+    
+    return structured_errors

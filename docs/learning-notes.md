@@ -22,3 +22,16 @@ Learned how to:
 - split log text into lines
 - detect error lines
 - build a simple log parsing service
+
+# Day 6 Notes
+
+Today I learned how to convert raw log errors in structured dictionaries
+
+New concepts:
+- normalization
+- classification rules
+- structured error records
+
+Functions added:
+- classify_error_line()
+- structure_detected_errors()

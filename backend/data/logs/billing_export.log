@@ -1,5 +1,5 @@
 Job Started: Billing Export
 Connecting to database...
-FAILED: Dependency job not completed
+PERMISSION_DENIED: Password incorrect.
 ERROR: Database connection timeout.
 Job failed.
