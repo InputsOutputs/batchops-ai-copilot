@@ -1,0 +1,4 @@
+Job Started: Billing Export
+Connecting to database...
+ERROR: Database connection timeout.
+Job failed.

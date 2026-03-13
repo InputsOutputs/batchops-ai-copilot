@@ -14,3 +14,11 @@ What I learned:
 - functions can take inputs called parameters
 - functions can return values
 - logic becomes easier to reuse and understand
+
+# Day 4 Notes
+
+Learned how to:
+- read log files using Python
+- split log text into lines
+- detect error lines
+- build a simple log parsing service
