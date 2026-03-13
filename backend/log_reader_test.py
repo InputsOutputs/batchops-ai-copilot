@@ -9,7 +9,7 @@ from app.services.log_service import read_log_file
 from app.services.log_service import extract_error_lines
 
 # Path to the log file
-log_path = "backend/data/logs/vendor_file_import.log"
+log_path = "backend/data/logs/billing_export.log"
 
 # Read the log file
 log_text = read_log_file(log_path)

@@ -1,4 +1,5 @@
 Job Started: Billing Export
 Connecting to database...
+FAILED: Dependency job not completed
 ERROR: Database connection timeout.
 Job failed.

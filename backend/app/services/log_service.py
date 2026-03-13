@@ -1,29 +1,41 @@
 #--------------------------------------
 # log_service.py
 #--------------------------------------
-# This module contains functions that work
-# with log files.
+# Improved log parsing service
 #
-# Today we will:
-# 1. Read log files
-# 2. Extract error messages
+# Improvments added in Day 5:
+# 1. Multiple error keyword detection
+# 2. Error handling for missing files
+# 3. Cleaner and scalable detection logic
 #--------------------------------------
 
-
+# List of patterns that indicate a failure
+ERROR_PATTERNS = [
+    "ERROR",
+    "FAILED",
+    "EXCEPTION",
+    "TIMEOUT"
+]
 # Function to read the contents of a log file
 def read_log_file(file_path):
     """
     Reads a log file and returns its contents as a string.
     """
 
-    # Open the file in read mode ("r")
-    with open(file_path, "r") as file:
+    try:
+        # Open file safely
+        with open(file_path, "r") as file:
+            log_text = file.read()
 
-        # Read the entire file contents
-        log_text = file.read()
+        return log_text
+    
+    except FileNotFoundError:
+        print(f"Log file not found: {file_path}")
+        return ""
 
-    # Retrun the log text
-    return log_text
+    except Exception as e:
+        print(f"Unexpected error while reading log file: {e}")
+        return ""
 
 # Function to extract error lines form a log
 def extract_error_lines(log_text):
@@ -35,14 +47,17 @@ def extract_error_lines(log_text):
     # Split the log into individual lines
     lines = log_text.split("\n")
 
-    error_lines = []
+    detected_errors = []
 
     # Loop through each line
     for line in lines:
 
-        # Check if the word ERROR exists in a line
-        if "ERROR" in line:
+        # Check each error pattern
+        for pattern in ERROR_PATTERNS:
 
-            # ADD the line to the list
-            error_lines.append(line)
-    return error_lines
+            if pattern in line:
+                detected_errors.append(line)
+
+                # Once matched, stop checking other patterns
+                break
+    return detected_errors
