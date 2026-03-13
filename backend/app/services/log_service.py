@@ -88,7 +88,7 @@ def classify_error_line(error_line):
     elif "DATABASE" in upper_line and "TIMEOUT" in upper_line:
         return {
             "error_type": "DATABASE_TIMEOUT",
-            "serverity": "HIGH",
+            "severity": "HIGH",
             "message": error_line
         }
 
