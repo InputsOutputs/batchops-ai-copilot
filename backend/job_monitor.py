@@ -27,12 +27,13 @@ def monitor_jobs():
 
             print("Detected Errors:")
             
-            for error in errors:
+            for error in results:
 
                 print(
                     f"- {error['error_type']} "
-                    f"(Serverity: {error['severity']})"
+                    f"(Severity: {error['severity']})"
                 )
+                
                 print(f" Message: {error['message']}")
 
 if __name__ == "__main__":

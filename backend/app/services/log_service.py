@@ -80,7 +80,7 @@ def classify_error_line(error_line):
     if "FILE" in upper_line and "NOT FOUND" in upper_line:
         return {
             "error_type": "FILE_NOT_FOUND",
-            "serverity": "HIGH",
+            "severity": "HIGH",
             "message": error_line
         }
         
