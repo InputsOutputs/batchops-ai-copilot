@@ -34,7 +34,7 @@ def monitor_jobs():
                     f"(Severity: {error['severity']})"
                 )
 
-                print(f"  Message: {error['message']}")
+                print(f"  Message: {error['message']}\n")
 
 if __name__ == "__main__":
     monitor_jobs()
