@@ -33,8 +33,8 @@ def monitor_jobs():
                     f"- {error['error_type']} "
                     f"(Severity: {error['severity']})"
                 )
-                
-                print(f" Message: {error['message']}")
+
+                print(f"  Message: {error['message']}")
 
 if __name__ == "__main__":
     monitor_jobs()
