@@ -35,3 +35,14 @@ New concepts:
 Functions added:
 - classify_error_line()
 - structure_detected_errors()
+
+# Day & Notes
+
+Connected job definitions with log parsing
+
+Created:
+- job_service
+- job_analyzer
+- job_monitor
+
+System now analyzes multiple jobs and reports structured failures
