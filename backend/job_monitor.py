@@ -4,6 +4,7 @@
 # Main monitoring script for batch jobs
 from app.services.job_service import get_all_jobs
 from app.services.job_analyzer import analyze_job
+from app.services.diagnosis_service import generate_diagnosis
 
 def monitor_jobs():
     """
@@ -41,6 +42,13 @@ def monitor_jobs():
             
         print(f"Job Status: {job_status}")
         print(f"Overall Severity: {overall_severity}")
+
+        # Generate diagnosis
+        root_cause, action = generate_diagnosis(results)
+
+        if root_cause:
+            print(f"Root Cause: {root_cause}")
+            print(f"Suggested Action: {action}")
 
         # If errors exist, print details
         if results:
