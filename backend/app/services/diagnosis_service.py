@@ -4,6 +4,15 @@
 # Convers structured errors into human-readable diagnosis
 # ----------------------------------------------
 
+# Priority ranking (higher = more important)
+ERROR_PRIORITY = {
+    "PERMISSION_DENIED": 4,
+    "FILE_NOT_FOUND": 3,
+    "DATABASE_TIMEOUT": 2,
+    "DEPENDENCY_FAILURE": 1,
+    "UNKNOWN_ERROR": 0
+}
+
 def get_root_cause(error_type):
     """
     Maps error types to root cause explanations.
@@ -60,9 +69,21 @@ def generate_diagnosis(errors):
         return None, None
 
     # Pick the first error as primary (simple logic for now)
-    primary_error = errors[0]
+    primary_error = max(
+        errors,
+        key=lambda e: ERROR_PRIORITY.get(e["error_type"], 0)
+    )
+
+    sorted_errors = sorted(
+        errors,
+        key=lambda e: ERROR_PRIORITY.get(e["error_type"], 0),
+        reverse=True
+    )
 
     error_type = primary_error["error_type"]
+    
+    primary_error = sorted_errors[0]
+    secondary_errors = sorted_errors[1:]
 
     root_cause = get_root_cause(error_type)
     action = get_suggested_action(error_type)
