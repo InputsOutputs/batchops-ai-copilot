@@ -46,3 +46,14 @@ Created:
 - job_monitor
 
 System now analyzes multiple jobs and reports structured failures
+
+# Day 11 Notes
+Learned how to map error types to responsible teams.
+
+Added:
+- get_team_owner()
+
+System now supports:
+- Root Cause
+- Suggested Action
+- Ownership Routing

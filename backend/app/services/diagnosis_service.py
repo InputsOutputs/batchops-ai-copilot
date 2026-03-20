@@ -59,33 +59,84 @@ def get_suggested_action(error_type):
     else:
         return "Review logs and escalate to application team if needed."
 
-def generate_diagnosis(errors):
+# This function gets the team owners
+def get_team_owner(error_type):
     """
-    Generates a primary root case and suggested action
-    based on detected errors.
+    Determines which team should handle the issue
+    based on the error type.
+
+    Returns:
+    dictionary: primary and secondary team owners
     """
 
+    if error_type == "FILE_NOT_FOUND":
+        return {
+            "primary_owner": "Operations Team",
+            "secondary_owner": "Vendor / Upstream Team"
+        }
+    
+    elif error_type == "DATABASE_TIMEOUT":
+        return {
+            "primary_owner": "Database Team",
+            "secondary_owner": "Application Team"
+        }
+
+    elif error_type == "PERMISSION_DENIED":
+        return {
+            "primary_owner": "Security Team",
+            "secondary_owner": "Application Team"
+        }
+
+    elif error_type == "DEPENDENCY_FAILURE":
+        return {
+            "primary_owner": "Operations Team",
+            "secondary_owner": "Application Team"
+        }
+
+    elif error_type == "DATA_DUPLICATE":
+        return {
+            "primary_owner": "Application Team",
+            "secondary_owner": "Database Team"
+        }
+
+    else:
+        return {
+            "primary_owner": "RunMyJops Team",
+            "secondary_owner": "Job Owner Team"
+        }
+
+def generate_diagnosis(errors):
+    """
+    Generates diagnosis including:
+    - Root Cause
+    - Suggested Action
+    - Ownership
+    """
+    # If no errors, return empty values
     if not errors:
         return None, None
 
-    # Pick the first error as primary (simple logic for now)
-    primary_error = max(
-        errors,
-        key=lambda e: ERROR_PRIORITY.get(e["error_type"], 0)
-    )
+    # Import priority mapping (adding in day 10)
+    from app.services.diagnosis_service import ERROR_PRIORITY
 
+    # Sort errors by priority (highest first)
     sorted_errors = sorted(
         errors,
         key=lambda e: ERROR_PRIORITY.get(e["error_type"], 0),
         reverse=True
     )
 
+    # Pick highest priority error as root cause
+    primary_error = sorted_errors[0]
     error_type = primary_error["error_type"]
     
-    primary_error = sorted_errors[0]
-    secondary_errors = sorted_errors[1:]
-
+    # Get root cause explanation
     root_cause = get_root_cause(error_type)
+
+    # Get suggested action
     action = get_suggested_action(error_type)
 
-    return root_cause, action
+    # Get ownership mapping
+    owner_info = get_team_owner(error_type)
+
+    return root_cause, action, owner_info

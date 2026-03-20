@@ -44,11 +44,15 @@ def monitor_jobs():
         print(f"Overall Severity: {overall_severity}")
 
         # Generate diagnosis
-        root_cause, action = generate_diagnosis(results)
+        root_cause, action, owner_info = generate_diagnosis(results)
 
         if root_cause:
             print(f"Root Cause: {root_cause}")
             print(f"Suggested Action: {action}")
+
+            # Print ownership details
+            print(f"Primary Owner: {owner_info['primary_owner']}")
+            print(f"Secondary Owner: {owner_info['secondary_owner']}")
 
         # If errors exist, print details
         if results:
