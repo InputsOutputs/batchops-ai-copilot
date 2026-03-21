@@ -1,7 +1,7 @@
 # ----------------------------------------------
 # diagnosis_service.py
 # ----------------------------------------------
-# Convers structured errors into human-readable diagnosis
+# Converts structured errors into human-readable diagnosis
 # ----------------------------------------------
 
 # Priority ranking (higher = more important)
@@ -114,7 +114,7 @@ def generate_diagnosis(errors):
     """
     # If no errors, return empty values
     if not errors:
-        return None, None
+        return None, None, None, []
 
     # Import priority mapping (adding in day 10)
     from app.services.diagnosis_service import ERROR_PRIORITY
@@ -128,8 +128,17 @@ def generate_diagnosis(errors):
 
     # Pick highest priority error as root cause
     primary_error = sorted_errors[0]
-    error_type = primary_error["error_type"]
+
+    # Contributing errors
+    contributing_errors = sorted_errors[1:]
+
+    contributing_error_types = []
+
+    for e in contributing_errors:
+        contributing_error_types.append(e["error_type"])
     
+    error_type = primary_error["error_type"]
+
     # Get root cause explanation
     root_cause = get_root_cause(error_type)
 
@@ -139,4 +148,4 @@ def generate_diagnosis(errors):
     # Get ownership mapping
     owner_info = get_team_owner(error_type)
 
-    return root_cause, action, owner_info
+    return root_cause, action, owner_info, contributing_error_types

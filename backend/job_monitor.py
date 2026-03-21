@@ -44,17 +44,25 @@ def monitor_jobs():
         print(f"Overall Severity: {overall_severity}")
 
         # Generate diagnosis
-        root_cause, action, owner_info = generate_diagnosis(results)
+        root_cause, action, owner_info, contributing_error_types = generate_diagnosis(results)
 
         if root_cause:
             print(f"Root Cause: {root_cause}")
             print(f"Suggested Action: {action}")
 
             # Print ownership details
-            print(f"Primary Owner: {owner_info['primary_owner']}")
+            print(f"\nPrimary Owner: {owner_info['primary_owner']}")
             print(f"Secondary Owner: {owner_info['secondary_owner']}")
 
+            # Print contributing issues only if present
+            if contributing_error_types:
+                print("\nContributing Issues:")
+                for issue in contributing_error_types:
+                    print(f"- {issue}")
+
+
         # If errors exist, print details
+        """
         if results:
             print("\nDetected Errors:")
 
@@ -65,6 +73,7 @@ def monitor_jobs():
                 )
                 
                 print(f"  Message: {error['message']}\n")
+        """
 
 if __name__ == "__main__":
     monitor_jobs()
