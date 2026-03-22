@@ -3,3 +3,4 @@ __pycache__/
 *.pyc
 docs/revised-scope-of-work.md
 docs/30-day-roadmap.md
+backend/practice.py

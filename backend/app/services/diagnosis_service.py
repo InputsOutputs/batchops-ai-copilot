@@ -114,7 +114,12 @@ def generate_diagnosis(errors):
     """
     # If no errors, return empty values
     if not errors:
-        return None, None, None, []
+        return {
+            "root_cause": None,
+            "action": None,
+            "owner_info": None,
+            "contributing_errors": []
+        }
 
     # Import priority mapping (adding in day 10)
     from app.services.diagnosis_service import ERROR_PRIORITY
@@ -132,10 +137,7 @@ def generate_diagnosis(errors):
     # Contributing errors
     contributing_errors = sorted_errors[1:]
 
-    contributing_error_types = []
-
-    for e in contributing_errors:
-        contributing_error_types.append(e["error_type"])
+    contributing_error_types = [e["error_type"] for e in contributing_errors]
     
     error_type = primary_error["error_type"]
 
@@ -148,4 +150,9 @@ def generate_diagnosis(errors):
     # Get ownership mapping
     owner_info = get_team_owner(error_type)
 
-    return root_cause, action, owner_info, contributing_error_types
+    return {
+        "root_cause": root_cause,
+        "action": action,
+        "owner_info": owner_info,
+        "contributing_errors": contributing_error_types
+    }
