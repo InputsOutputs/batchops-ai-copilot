@@ -6,6 +6,7 @@
 
 # Priority ranking (higher = more important)
 ERROR_PRIORITY = {
+    "DATA_DUPLICATE": 5,
     "PERMISSION_DENIED": 4,
     "FILE_NOT_FOUND": 3,
     "DATABASE_TIMEOUT": 2,

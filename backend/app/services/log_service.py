@@ -13,7 +13,8 @@ ERROR_PATTERNS = [
     "FAILED",
     "EXCEPTION",
     "TIMEOUT",
-    "PERMISSION_DENIED"
+    "PERMISSION_DENIED",
+    "DATA_DUPLICATE"
 ]
 # Function to read the contents of a log file
 def read_log_file(file_path):
@@ -91,6 +92,15 @@ def classify_error_line(error_line):
             "severity": "HIGH",
             "message": error_line
         }
+
+    # Detect Duplicate Data Issues
+    elif "duplicate" in upper_line.lower():
+        return {
+            "error_type": "DATA_DUPLICATE",
+            "severity": "HIGH",
+            "message": error_line
+        }
+    
 
     # Detect dependency-related failures
     elif "DEPENDENCY" in upper_line:
