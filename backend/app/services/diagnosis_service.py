@@ -14,28 +14,16 @@ ERROR_PRIORITY = {
     "UNKNOWN_ERROR": 0
 }
 
+ROOT_CAUSE_MAP = {
+        "FILE_NOT_FOUND": "Missing input file from upstream source.",
+        "DATABASE_TIMEOUT": "Database running issue or long running query",
+        "PERMISSION_DENIED": "Authentication or authorization failure.",
+        "DEPENDENCY_FAILURE": "Upstream job dependency not completed.",
+        "DATA_DUPLICATE": "Duplicate records detected in database."
+    }
+
 def get_root_cause(error_type):
-    """
-    Maps error types to root cause explanations.
-    """
-
-    if error_type == "FILE_NOT_FOUND":
-        return "Missing input file from upstream source."
-
-    elif error_type == "DATABASE_TIMEOUT":
-        return "Database running issue or long running query."
-
-    elif error_type == "PERMISSION_DENIED":
-        return "Authentication or authorization failure."
-        
-    elif error_type == "DEPENDENCY_FAILURE":
-        return "Upstream job dependency not completed."
-
-    elif error_type == "DATA_DUPLICATE":
-        return "Duplicate records detected in database."
-
-    else:
-        return "Unknow issue. Further investigation required."
+    return ROOT_CAUSE_MAP.get(error_type, "Unknown Issue. Further Investigation Required.")
 
 def get_suggested_action(error_type):
     """
