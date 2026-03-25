@@ -46,20 +46,7 @@ def monitor_jobs():
         # Generate diagnosis
         diagnosis = generate_diagnosis(results)
 
-        if diagnosis["root_cause"]:
-            print(f"Root Cause: {diagnosis['root_cause']}")
-            print(f"Suggested Action: {diagnosis['action']}")
-
-            # Print ownership details
-            print(f"\nPrimary Owner: {diagnosis['owner_info']['primary_owner']}")
-            print(f"Secondary Owner: {diagnosis['owner_info']['secondary_owner']}")
-
-            # Print contributing issues only if present
-            if diagnosis["contributing_errors"]:
-                print(f"\nContributing Issues ({len(diagnosis['contributing_errors'])}):")
-                for issue in diagnosis["contributing_errors"]:
-                    print(f"- {issue}")
-
+        print_diagnosis(diagnosis)
         # If errors exist, print details
         """
         if results:
@@ -73,6 +60,25 @@ def monitor_jobs():
                 
                 print(f"  Message: {error['message']}\n")
         """
+# Function for printing logic
+def print_diagnosis(diagnosis):
+    """
+    Print diagnosis output in structured format.
+    """
+    if diagnosis["root_cause"]:
+        print(f"Root Cause: {diagnosis['root_cause']}")
+        print(f"Suggested Action: {diagnosis['action']}")
+
+        # Print ownership details
+        print(f"\nPrimary Owner: {diagnosis['owner_info']['primary_owner']}")
+        print(f"Secondary Owner: {diagnosis['owner_info']['secondary_owner']}")
+
+        # Print contributing issues only if present
+        if diagnosis["contributing_errors"]:
+            print(f"\nContributing Issues ({len(diagnosis['contributing_errors'])}):")
+            for issue in diagnosis["contributing_errors"]:
+                print(f"- {issue}")
+
 
 if __name__ == "__main__":
     monitor_jobs()

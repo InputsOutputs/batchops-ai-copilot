@@ -21,6 +21,11 @@ def get_all_jobs():
             "job_id": 2,
             "job_name": "Billing_Export",
             "log_file": "backend/data/logs/billing_export.log"
+        },
+        {
+            "job_id": 3,
+            "job_name": "Customer_Orders_Tables",
+            "log_file": "backend/data/logs/Customer_Orders_Tables.log"
         }
     ]
     return jobs
