@@ -6,6 +6,7 @@ from app.services.job_service import get_all_jobs
 from app.services.job_analyzer import analyze_job
 from app.services.diagnosis_service import generate_diagnosis
 
+
 def monitor_jobs():
     """
     Runs analysis on all jobs
@@ -19,10 +20,13 @@ def monitor_jobs():
         print(f"Analyzing Job: {job['job_name']}")
         print("====================================")
 
-        results = analyze_job(job)
+        results, log_text = analyze_job(job)
 
         # Determine job status based on whether errors were detected
-        if not results:
+        if log_text is None:
+            job_status = "UNKNOWN"
+            overall_severity = "MEDIUM"
+        elif not results:
             print("No errors detected.")
             job_status = "SUCCESS"
             overall_severity = "NONE"

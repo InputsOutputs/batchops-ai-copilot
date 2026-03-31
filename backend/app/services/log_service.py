@@ -30,12 +30,12 @@ def read_log_file(file_path):
         return log_text
     
     except FileNotFoundError:
-        print(f"Log file not found: {file_path}")
-        return ""
+        print(f"Log file not found: {file_path}\n")
+        return None
 
     except Exception as e:
-        print(f"Unexpected error while reading log file: {e}")
-        return ""
+        print(f"Unexpected error while reading log file: {e}\n")
+        return None
 
 # Function to extract error lines form a log
 def extract_error_lines(log_text):
@@ -44,6 +44,10 @@ def extract_error_lines(log_text):
     lines that contain ERROR.
     """
 
+    # Handle missing log
+    if log_text is None:
+        return []
+    
     # Split the log into individual lines
     lines = log_text.split("\n")
 
