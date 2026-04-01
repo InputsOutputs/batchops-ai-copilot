@@ -5,6 +5,7 @@
 from app.services.job_service import get_all_jobs
 from app.services.job_analyzer import analyze_job
 from app.services.diagnosis_service import generate_diagnosis
+import json
 
 
 def monitor_jobs():
@@ -13,8 +14,16 @@ def monitor_jobs():
     """
 
     jobs = get_all_jobs()
+    total_jobs = 0
+    failed_jobs = 0
+    unknown_jobs = 0
+    success_jobs = 0
+
+    all_jobs_summary = []
 
     for job in jobs:
+
+        total_jobs += 1
 
         print("\n====================================")
         print(f"Analyzing Job: {job['job_name']}")
@@ -32,7 +41,7 @@ def monitor_jobs():
             overall_severity = "NONE"
         else:
             job_status = "FAILED"
-            
+
             for error in results:
 
                 # Determine the highest severity among detected errors
@@ -51,19 +60,42 @@ def monitor_jobs():
         diagnosis = generate_diagnosis(results)
 
         print_diagnosis(diagnosis)
-        # If errors exist, print details
-        """
-        if results:
-            print("\nDetected Errors:")
 
-            for error in results:
-                print(
-                    f"- {error['error_type']} "
-                    f"(Severity: {error['severity']})"
-                )
-                
-                print(f"  Message: {error['message']}\n")
-        """
+        if job_status == "FAILED":
+            failed_jobs += 1
+        elif job_status == "SUCCESS":
+            success_jobs += 1
+        elif job_status == "UNKNOWN":
+            unknown_jobs += 1
+
+        # Create job summary for this job for structured output
+        job_summary = {
+            "job_name": job["job_name"],
+            "status": job_status,
+            "severity": overall_severity,
+            "diagnosis": {
+                "root_cause": diagnosis["root_cause"],
+                "action": diagnosis["action"],
+                "primary_owner": diagnosis["owner_info"]["primary_owner"] if diagnosis["owner_info"] else None,
+                "secondary_owner": diagnosis["owner_info"]["secondary_owner"] if diagnosis["owner_info"] else None,
+                "contributing_errors": diagnosis["contributing_errors"]
+            }
+        }
+        # Appends summary of each job to overall summary list
+        all_jobs_summary.append(job_summary)
+
+    print("\nAll Jobs Summary:")
+    print(all_jobs_summary)
+
+    print("\n====================================")
+    print("Monitoring Summary")
+    print("====================================")
+
+    print(f"Total Jobs: {total_jobs}")
+    print(f"Failed Jobs: {failed_jobs}")
+    print(f"Unknown Jobs: {unknown_jobs}")
+    print(f"Successful Jobs: {success_jobs}")
+
 # Function for printing logic
 def print_diagnosis(diagnosis):
     """
