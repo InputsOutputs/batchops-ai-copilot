@@ -85,7 +85,7 @@ def monitor_jobs():
         all_jobs_summary.append(job_summary)
 
     print("\nAll Jobs Summary:")
-    print(all_jobs_summary)
+    print(json.dumps(all_jobs_summary, indent=4))
 
     print("\n====================================")
     print("Monitoring Summary")
