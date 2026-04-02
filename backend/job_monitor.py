@@ -5,8 +5,8 @@
 from app.services.job_service import get_all_jobs
 from app.services.job_analyzer import analyze_job
 from app.services.diagnosis_service import generate_diagnosis
+from app.services.job_summary import build_job_summary
 import json
-
 
 def monitor_jobs():
     """
@@ -69,18 +69,7 @@ def monitor_jobs():
             unknown_jobs += 1
 
         # Create job summary for this job for structured output
-        job_summary = {
-            "job_name": job["job_name"],
-            "status": job_status,
-            "severity": overall_severity,
-            "diagnosis": {
-                "root_cause": diagnosis["root_cause"],
-                "action": diagnosis["action"],
-                "primary_owner": diagnosis["owner_info"]["primary_owner"] if diagnosis["owner_info"] else None,
-                "secondary_owner": diagnosis["owner_info"]["secondary_owner"] if diagnosis["owner_info"] else None,
-                "contributing_errors": diagnosis["contributing_errors"]
-            }
-        }
+        job_summary = build_job_summary(job, job_status, overall_severity, diagnosis)
         # Appends summary of each job to overall summary list
         all_jobs_summary.append(job_summary)
 
