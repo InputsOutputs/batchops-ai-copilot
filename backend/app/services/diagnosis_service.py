@@ -4,23 +4,8 @@
 # Converts structured errors into human-readable diagnosis
 # ----------------------------------------------
 
+from app.config.constants import ERROR_PRIORITY, ROOT_CAUSE_MAP, ACTION_MAP, OWNER_MAP
 # Priority ranking (higher = more important)
-ERROR_PRIORITY = {
-    "DATA_DUPLICATE": 5,
-    "PERMISSION_DENIED": 4,
-    "FILE_NOT_FOUND": 3,
-    "DATABASE_TIMEOUT": 2,
-    "DEPENDENCY_FAILURE": 1,
-    "UNKNOWN_ERROR": 0
-}
-
-ROOT_CAUSE_MAP = {
-        "FILE_NOT_FOUND": "Missing input file from upstream source.",
-        "DATABASE_TIMEOUT": "Database running issue or long running query",
-        "PERMISSION_DENIED": "Authentication or authorization failure.",
-        "DEPENDENCY_FAILURE": "Upstream job dependency not completed.",
-        "DATA_DUPLICATE": "Duplicate records detected in database."
-    }
 
 def get_root_cause(error_type):
     return ROOT_CAUSE_MAP.get(error_type, "Unknown Issue. Further Investigation Required.")
@@ -29,24 +14,7 @@ def get_suggested_action(error_type):
     """
     Maps error type to root cause explanations.
     """
-
-    if error_type == "FILE_NOT_FOUND":
-        return "Check if the file was delivered to the expected location (SFTP/inbound folder)."
-
-    elif error_type == "DATABASE_TIMEOUT":
-        return "Verify database connectivity and check for long running queries."
-
-    elif error_type == "PERMISSION_DENIED":
-        return "Verify credentials, permissions, and access configuration."
-
-    elif error_type == "DEPENDENCY_FAILURE":
-        return "Check upstream job status and rerun dependency if needed."
-
-    elif error_type == "DATA_DUPLICATE":
-        return "Run queries to identify duplicate records and clean up data."
-
-    else:
-        return "Review logs and escalate to application team if needed."
+    return ACTION_MAP.get(error_type, "Review logs and escalate to application team if needed.")
 
 # This function gets the team owners
 def get_team_owner(error_type):
@@ -57,42 +25,10 @@ def get_team_owner(error_type):
     Returns:
     dictionary: primary and secondary team owners
     """
-
-    if error_type == "FILE_NOT_FOUND":
-        return {
-            "primary_owner": "Operations Team",
-            "secondary_owner": "Vendor / Upstream Team"
-        }
-    
-    elif error_type == "DATABASE_TIMEOUT":
-        return {
-            "primary_owner": "Database Team",
-            "secondary_owner": "Application Team"
-        }
-
-    elif error_type == "PERMISSION_DENIED":
-        return {
-            "primary_owner": "Security Team",
-            "secondary_owner": "Application Team"
-        }
-
-    elif error_type == "DEPENDENCY_FAILURE":
-        return {
-            "primary_owner": "Operations Team",
-            "secondary_owner": "Application Team"
-        }
-
-    elif error_type == "DATA_DUPLICATE":
-        return {
-            "primary_owner": "Application Team",
-            "secondary_owner": "Database Team"
-        }
-
-    else:
-        return {
-            "primary_owner": "RunMyJops Team",
-            "secondary_owner": "Job Owner Team"
-        }
+    return OWNER_MAP.get(error_type, {
+        "primary_team": "Run My Jobs Team",
+        "secondary_team": "Application Team"
+    })
 
 def generate_diagnosis(errors):
     """
